@@ -731,6 +731,7 @@ require('lazy').setup({
 
   { -- Autoformat
     'stevearc/conform.nvim',
+
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
     keys = {
@@ -744,7 +745,13 @@ require('lazy').setup({
       },
     },
     opts = {
-      notify_on_error = false,
+      notify_on_error = true,
+      -- this fixed the java formatting, I don't know if it was removing the incorrect import earlier
+      formatters = {
+        ['google-java-format'] = {
+          prepend_args = { '--aosp' }, -- Ensure 4-space indentation
+        },
+      },
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
@@ -761,6 +768,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        java = { 'google-java-format' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
